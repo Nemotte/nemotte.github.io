@@ -1,0 +1,996 @@
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,inital-scale=1,user-scalable=no">
+  <title>《编译原理》笔记 [ DaSE Static Blog ]</title>
+  <!-- bootstrapcss文件 -->
+ <!--  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+<!--   
+<link rel="stylesheet" href="/css/zhl.css">
+
+ -->
+  
+    <!-- stylesheets list from config.yml -->
+    
+      <link rel="stylesheet" href="/css/fork-awesome.min.css">
+    
+      <link rel="stylesheet" href="/css/zhl.css">
+    
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+<div class="container-fluid">
+  <div class="row">
+  <div id="wrap" class="col-md-12">
+    <div id="header">
+	<div id="header-left">
+	<h1 id="header-title"> 
+	<a href="/">
+		DaSE Static Blog
+	</a>
+	</h1>
+	
+	</div>
+	<div id="header-right">
+		
+		
+		<a href="/"  title="主页"><i class="fa fa-home ">主页</i></a>
+		
+		<a target="_blank" rel="noopener" href="https://www.nemotte.cn/"  title="Nemotte&#39;s Blog"><i class="fa fa-code ">Nemotte&#39;s Blog</i></a>
+		
+		<a href="/about"  title="关于"><i class="fa fa-user ">关于</i></a>
+		
+		<a href="/game"  title="小游戏"><i class="fa fa-heart-o ">小游戏</i></a>
+		
+		<a href="/lab02"  title="HTML实验"><i class="fa fa-leaf ">HTML实验</i></a>
+		
+		<a href="/lab01"  title="JS实验"><i class="fa fa-leaf ">JS实验</i></a>
+		
+		
+	</div>
+</div>
+
+  </div>
+  </div>
+  <div id="content" class="row">
+    <div id="content-left" class="col-md-4">
+      
+
+	
+	<div class="widget-wrap">
+		<h3 class="widget-title fa fa-th">分类</h3>
+		<div class="widget">
+		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%A7%91%E4%B8%93%E4%B8%9A%E8%AF%BE%E7%AC%94%E8%AE%B0/">计科专业课笔记</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE%E6%8A%A5%E5%91%8A/">项目报告</a><span class="category-list-count">1</span></li></ul>
+		</div>
+	</div>
+
+
+	
+
+	
+	<div class="widget-wrap">
+		<h3 class="widget-title fa fa-archive">归档</h3>
+		<div class="widget">
+			<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a><span class="archive-list-count">5</span></li></ul>
+		</div>
+	</div>
+
+
+
+    </div>
+    <div id="content-right" class="col-md-8">
+    
+<article id="post">
+	<div class="post-title">
+  <h1>《编译原理》笔记</h1>
+  	</div>
+  <div class="page-meta">
+  	<span class="fa-wrap">
+  		<i class="fa fa-clock-o"></i>
+  		<span class="date-meta">2023-07-03</span>
+  	</span>
+  	<span class="fa-wrap">
+  		
+  	</span>
+  	<span class="fa-wrap">
+  		
+  		<i class="fa fa-th"></i>
+  		<span class="categories-meta">计科专业课笔记</span>
+  		
+  	</span>
+  </div>
+  <div class="post-content">
+  <ul>
+<li><a href="#%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%BC%95%E8%AE%BA">第一章 引论</a><ul>
+<li><a href="#%E7%BC%96%E8%AF%91%E7%A8%8B%E5%BA%8F">编译程序</a></li>
+<li><a href="#%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B">编译过程</a></li>
+<li><a href="#%E7%BC%96%E8%AF%91%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%84">编译程序结构</a><ul>
+<li><a href="#%E8%A1%A8%E6%A0%BC%E4%B8%8E%E8%A1%A8%E6%A0%BC%E7%AE%A1%E7%90%86">表格与表格管理</a></li>
+<li><a href="#%E5%87%BA%E9%94%99%E5%A4%84%E7%90%86">出错处理</a></li>
+<li><a href="#%E9%81%8Dpass">遍pass</a></li>
+<li><a href="#%E7%BC%96%E8%AF%91%E5%89%8D%E7%AB%AF%E4%B8%8E%E5%90%8E%E7%AB%AF">编译前端与后端</a></li>
+</ul>
+</li>
+<li><a href="#%E7%BC%96%E8%AF%91%E7%A8%8B%E5%BA%8F%E7%94%9F%E6%88%90">编译程序生成</a></li>
+</ul>
+</li>
+<li><a href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E9%AB%98%E7%BA%A7%E8%AF%AD%E8%A8%80%E5%8F%8A%E5%85%B6%E8%AF%AD%E6%B3%95%E6%8F%8F%E8%BF%B0">第二章 高级语言及其语法描述</a><ul>
+<li><a href="#%E7%A8%8B%E5%BA%8F%E8%AF%AD%E8%A8%80%E7%9A%84%E5%AE%9A%E4%B9%89">程序语言的定义</a><ul>
+<li><a href="#%E8%AF%AD%E6%B3%95">语法</a></li>
+<li><a href="#%E8%AF%AD%E4%B9%89">语义</a></li>
+</ul>
+</li>
+<li><a href="#%E7%A8%8B%E5%BA%8F%E8%AF%AD%E8%A8%80%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8A%9F%E8%83%BD%E5%92%8C%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84">程序语言的基本功能和层次结构</a></li>
+<li><a href="#%E9%AB%98%E7%BA%A7%E8%AF%AD%E8%A8%80%E7%9A%84%E4%B8%80%E8%88%AC%E7%89%B9%E6%80%A7">高级语言的一般特性</a><ul>
+<li><a href="#%E9%AB%98%E7%BA%A7%E8%AF%AD%E8%A8%80%E7%9A%84%E5%88%86%E7%B1%BB">高级语言的分类</a></li>
+<li><a href="#%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%84">程序结构</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E4%B8%8E%E6%93%8D%E4%BD%9C">数据类型与操作</a></li>
+<li><a href="#%E6%A0%87%E8%AF%86%E7%AC%A6%E4%B8%8E%E5%90%8D%E5%AD%97">标识符与名字</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">数据结构</a></li>
+<li><a href="#%E6%8A%BD%E8%B1%A1%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B">抽象数据类型</a></li>
+</ul>
+</li>
+<li><a href="#%E8%AF%AD%E5%8F%A5%E4%B8%8E%E6%8E%A7%E5%88%B6%E7%BB%93%E6%9E%84">语句与控制结构</a><ul>
+<li><a href="#%E8%AF%AD%E5%8F%A5">语句</a></li>
+</ul>
+</li>
+<li><a href="#%E7%A8%8B%E5%BA%8F%E8%AF%AD%E8%A8%80%E7%9A%84%E8%AF%AD%E6%B3%95%E6%8F%8F%E8%BF%B0">程序语言的语法描述</a><ul>
+<li><a href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E6%97%A0%E5%85%B3%E6%96%87%E6%B3%95">上下文无关文法</a></li>
+<li><a href="#%E8%AF%AD%E6%B3%95%E6%A0%91%E4%B8%8E%E4%BA%8C%E4%B9%89%E6%80%A7">语法树与二义性</a></li>
+<li><a href="#%E5%BD%A2%E5%BC%8F%E8%AF%AD%E8%A8%80%E9%B8%9F%E7%9E%B0">形式语言鸟瞰</a><ul>
+<li><a href="#0%E5%9E%8B%E6%96%87%E6%B3%95">0型文法</a></li>
+<li><a href="#1%E5%9E%8B%E6%96%87%E6%B3%95">1型文法</a></li>
+<li><a href="#2%E5%9E%8B%E6%96%87%E6%B3%95">2型文法</a></li>
+<li><a href="#3%E5%9E%8B%E6%96%87%E6%B3%95">3型文法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90">第三章 词法分析</a><ul>
+<li><a href="#%E5%AF%B9%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90%E5%99%A8%E7%9A%84%E8%A6%81%E6%B1%82">对词法分析器的要求</a><ul>
+<li><a href="#%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90%E5%99%A8%E7%9A%84%E5%8A%9F%E8%83%BD%E5%92%8C%E8%BE%93%E5%87%BA%E5%BD%A2%E5%BC%8F">词法分析器的功能和输出形式</a></li>
+<li><a href="#%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90%E5%99%A8%E4%BD%9C%E4%B8%BA%E4%B8%80%E4%B8%AA%E7%8B%AC%E7%AB%8B%E7%9A%84%E5%AD%90%E7%A8%8B%E5%BA%8F">词法分析器作为一个独立的子程序</a></li>
+</ul>
+</li>
+<li><a href="#%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1">词法分析器的设计</a><ul>
+<li><a href="#%E8%BE%93%E5%85%A5%E9%A2%84%E5%A4%84%E7%90%86">输入、预处理</a></li>
+<li><a href="#%E5%8D%95%E8%AF%8D%E7%AC%A6%E5%8F%B7%E7%9A%84%E8%AF%86%E5%88%AB%E8%B6%85%E5%89%8D%E6%90%9C%E7%B4%A2">单词符号的识别：超前搜索</a></li>
+<li><a href="#%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2%E5%9B%BE">状态转换图</a></li>
+</ul>
+</li>
+<li><a href="#%E6%AD%A3%E8%A7%84%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%B8%8E%E6%9C%89%E9%99%90%E8%87%AA%E5%8A%A8%E6%9C%BA">正规表达式与有限自动机</a><ul>
+<li><a href="#%E6%AD%A3%E8%A7%84%E5%BC%8F%E5%92%8C%E6%AD%A3%E8%A7%84%E9%9B%86">正规式和正规集</a></li>
+<li><a href="#%E7%A1%AE%E5%AE%9A%E6%9C%89%E9%99%90%E8%87%AA%E5%8A%A8%E6%9C%BAdfa">确定有限自动机DFA</a></li>
+<li><a href="#%E9%9D%9E%E7%A1%AE%E5%AE%9A%E6%9C%89%E9%99%90%E8%87%AA%E5%8A%A8%E6%9C%BAnfa">非确定有限自动机NFA</a></li>
+<li><a href="#nfa%E7%A1%AE%E5%AE%9A%E5%8C%96">NFA确定化</a></li>
+<li><a href="#%E6%AD%A3%E8%A7%84%E6%96%87%E6%B3%95%E4%B8%8E%E6%9C%89%E9%99%90%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%AD%89%E4%BB%B7%E6%80%A7">正规文法与有限自动机等价性</a></li>
+<li><a href="#%E6%AD%A3%E8%A7%84%E5%BC%8F%E4%B8%8E%E6%9C%89%E9%99%90%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%AD%89%E4%BB%B7%E6%80%A7">正规式与有限自动机等价性</a></li>
+<li><a href="#dfa%E6%9C%80%E5%B0%8F%E5%8C%96">DFA最小化</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90%E8%87%AA%E4%B8%8A%E8%80%8C%E4%B8%8B%E5%88%86%E6%9E%90">第四章 语法分析——自上而下分析</a><ul>
+<li><a href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E6%97%A0%E5%85%B3%E6%96%87%E6%B3%95%E7%9A%84%E5%AE%9A%E4%B9%89">上下文无关文法的定义</a></li>
+<li><a href="#%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90%E7%9A%84%E6%96%B9%E6%B3%95">语法分析的方法</a><ul>
+<li><a href="#%E8%87%AA%E4%B8%8A%E8%80%8C%E4%B8%8B%E5%88%86%E6%9E%90%E9%9D%A2%E4%B8%B4%E7%9A%84%E9%97%AE%E9%A2%98">自上而下分析面临的问题</a></li>
+</ul>
+</li>
+<li><a href="#ll1%E5%88%86%E6%9E%90%E6%B3%95">LL(1)分析法</a><ul>
+<li><a href="#%E5%B7%A6%E9%80%92%E5%BD%92%E7%9A%84%E6%B6%88%E9%99%A4">左递归的消除</a></li>
+<li><a href="#%E6%B6%88%E9%99%A4%E5%9B%9E%E6%BA%AF%E6%8F%90%E5%B7%A6%E5%9B%A0%E5%AD%90">消除回溯，提左因子</a></li>
+<li><a href="#firstfollow%E9%9B%86%E5%90%88">FIRST、FOLLOW集合</a></li>
+</ul>
+</li>
+<li><a href="#%E9%80%92%E5%BD%92%E4%B8%8B%E9%99%8D%E5%88%86%E6%9E%90%E7%A8%8B%E5%BA%8F%E6%9E%84%E9%80%A0">递归下降分析程序构造</a></li>
+<li><a href="#%E9%A2%84%E6%B5%8B%E5%88%86%E6%9E%90%E7%A8%8B%E5%BA%8F">预测分析程序</a><ul>
+<li><a href="#%E6%9E%84%E9%80%A0%E5%88%86%E6%9E%90%E8%A1%A8">构造分析表</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90%E8%87%AA%E4%B8%8B%E8%80%8C%E4%B8%8A%E5%88%86%E6%9E%90">第五章 语法分析——自下而上分析</a><ul>
+<li><a href="#%E5%BD%92%E7%BA%A6">归约</a><ul>
+<li><a href="#%E8%A7%84%E8%8C%83%E8%A7%84%E7%BA%A6">规范规约</a></li>
+</ul>
+</li>
+<li><a href="#lr%E5%88%86%E6%9E%90%E6%B3%95">LR分析法</a><ul>
+<li><a href="#lr%E5%88%86%E6%9E%90%E5%99%A8">LR分析器</a></li>
+<li><a href="#lr0%E9%A1%B9%E7%9B%AE%E9%9B%86%E6%97%8F%E5%92%8C%E5%88%86%E6%9E%90%E8%A1%A8%E6%9E%84%E9%80%A0">LR(0)项目集族和分析表构造</a></li>
+<li><a href="#slr%E5%88%86%E6%9E%90%E8%A1%A8%E6%9E%84%E9%80%A0">SLR分析表构造</a></li>
+<li><a href="#lr1%E5%88%86%E6%9E%90%E8%A1%A8%E6%9E%84%E9%80%A0">LR(1)分析表构造</a></li>
+<li><a href="#lalr1%E6%9E%84%E9%80%A0">LALR(1)构造</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%B1%9E%E6%80%A7%E6%96%87%E6%B3%95%E5%92%8C%E8%AF%AD%E6%B3%95%E5%88%B6%E5%AF%BC%E7%BF%BB%E8%AF%91">第六章 属性文法和语法制导翻译</a><ul>
+<li><a href="#%E5%B1%9E%E6%80%A7%E6%96%87%E6%B3%95">属性文法</a><ul>
+<li><a href="#%E7%BB%BC%E5%90%88%E5%B1%9E%E6%80%A7">综合属性</a></li>
+<li><a href="#%E7%BB%A7%E6%89%BF%E5%B1%9E%E6%80%A7">继承属性</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9F%BA%E4%BA%8E%E5%B1%9E%E6%80%A7%E6%96%87%E6%B3%95%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95">基于属性文法的处理方法</a><ul>
+<li><a href="#%E4%BE%9D%E8%B5%96%E5%9B%BE">依赖图</a></li>
+<li><a href="#%E6%A0%91%E9%81%8D%E5%8E%86">树遍历</a></li>
+<li><a href="#%E4%B8%80%E9%81%8D%E6%89%AB%E6%8F%8F">一遍扫描</a></li>
+<li><a href="#%E6%8A%BD%E8%B1%A1%E8%AF%AD%E6%B3%95%E6%A0%91">抽象语法树</a></li>
+</ul>
+</li>
+<li><a href="#s-%E5%B1%9E%E6%80%A7%E6%96%87%E6%B3%95%E7%9A%84%E8%87%AA%E4%B8%8B%E8%80%8C%E4%B8%8A%E8%AE%A1%E7%AE%97">S-属性文法的自下而上计算</a></li>
+<li><a href="#l-%E5%B1%9E%E6%80%A7%E6%96%87%E6%B3%95%E5%92%8C%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E7%BF%BB%E8%AF%91">L-属性文法和自顶向下翻译</a><ul>
+<li><a href="#%E7%BF%BB%E8%AF%91%E6%A8%A1%E5%BC%8F">翻译模式</a></li>
+<li><a href="#%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E7%BF%BB%E8%AF%91">自顶向下翻译</a></li>
+<li><a href="#%E9%80%92%E5%BD%92%E4%B8%8B%E9%99%8D%E7%BF%BB%E8%AF%91%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1">递归下降翻译器的设计</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-%E8%AF%AD%E4%B9%89%E5%88%86%E6%9E%90%E5%92%8C%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E4%BA%A7%E7%94%9F">第七章 语义分析和中间代码产生</a><ul>
+<li><a href="#%E4%B8%AD%E9%97%B4%E8%AF%AD%E8%A8%80">中间语言</a><ul>
+<li><a href="#%E5%90%8E%E7%BC%80%E5%BC%8F">后缀式</a></li>
+<li><a href="#%E5%9B%BE%E8%A1%A8%E7%A4%BA%E6%B3%95">图表示法</a></li>
+<li><a href="#%E4%B8%89%E5%9C%B0%E5%9D%80%E4%BB%A3%E7%A0%81">三地址代码</a><ul>
+<li><a href="#%E5%9B%9B%E5%85%83%E5%BC%8F">四元式</a></li>
+<li><a href="#%E4%B8%89%E5%85%83%E5%BC%8F">三元式</a></li>
+<li><a href="#%E9%97%B4%E6%8E%A5%E4%B8%89%E5%85%83%E5%BC%8F">间接三元式</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E8%B5%8B%E5%80%BC%E8%AF%AD%E5%8F%A5%E7%9A%84%E7%BF%BB%E8%AF%91">赋值语句的翻译</a><ul>
+<li><a href="#%E7%AE%80%E5%8D%95%E7%AE%97%E6%9C%AF%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%8F%8A%E8%B5%8B%E5%80%BC%E8%AF%AD%E5%8F%A5">简单算术表达式及赋值语句</a></li>
+<li><a href="#%E6%95%B0%E7%BB%84%E5%85%83%E7%B4%A0%E7%9A%84%E5%BC%95%E7%94%A8">数组元素的引用</a></li>
+</ul>
+</li>
+<li><a href="#%E5%B8%83%E5%B0%94%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E7%BF%BB%E8%AF%91">布尔表达式的翻译</a></li>
+</ul>
+</li>
+<li><a href="#%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%BF%90%E8%A1%8C%E6%97%B6%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4%E7%BB%84%E7%BB%87">第九章 运行时存储空间组织</a><ul>
+<li><a href="#%E7%9B%AE%E6%A0%87%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E6%97%B6%E7%9A%84%E6%B4%BB%E5%8A%A8">目标程序运行时的活动</a><ul>
+<li><a href="#%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92">参数传递</a><ul>
+<li><a href="#%E4%BC%A0%E5%9C%B0%E5%9D%80-call-by-reference">传地址 Call by reference</a></li>
+<li><a href="#%E5%BE%97%E7%BB%93%E6%9E%9C-call-by-result">得结果 Call by result</a></li>
+<li><a href="#%E4%BC%A0%E5%80%BC-call-by-value">传值 Call by value</a></li>
+<li><a href="#%E4%BC%A0%E5%90%8D-call-by-name">传名 Call by name</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E5%88%92%E5%88%86">运行时存储器的划分</a><ul>
+<li><a href="#%E6%B4%BB%E5%8A%A8%E8%AE%B0%E5%BD%95">活动记录</a></li>
+<li><a href="#%E5%AD%98%E5%82%A8%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5">存储分配策略</a></li>
+</ul>
+</li>
+<li><a href="#%E9%9D%99%E6%80%81%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86">静态存储管理</a></li>
+<li><a href="#%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E6%A0%88%E5%BC%8F%E5%AD%98%E5%82%A8%E5%88%86%E9%85%8D">一个简单栈式存储分配</a><ul>
+<li><a href="#c%E7%9A%84%E6%B4%BB%E5%8A%A8%E8%AE%B0%E5%BD%95">C的活动记录</a></li>
+<li><a href="#c%E7%9A%84%E8%BF%87%E7%A8%8B%E8%B0%83%E7%94%A8%E8%BF%87%E7%A8%8B%E8%BF%9B%E5%85%A5%E6%95%B0%E7%BB%84%E7%A9%BA%E9%97%B4%E5%88%86%E9%85%8D%E5%92%8C%E8%BF%87%E7%A8%8B%E8%BF%94%E5%9B%9E">C的过程调用、过程进入、数组空间分配和过程返回</a></li>
+</ul>
+</li>
+<li><a href="#%E5%B5%8C%E5%A5%97%E8%BF%87%E7%A8%8B%E8%AF%AD%E8%A8%80%E7%9A%84%E6%A0%88%E5%BC%8F%E5%AE%9E%E7%8E%B0">嵌套过程语言的栈式实现</a><ul>
+<li><a href="#%E9%9D%9E%E5%B1%80%E9%83%A8%E5%90%8D%E5%AD%97%E7%9A%84%E8%AE%BF%E9%97%AE%E7%9A%84%E5%AE%9E%E7%8E%B0">非局部名字的访问的实现</a><ul>
+<li><a href="#%E9%9D%99%E6%80%81%E9%93%BE%E5%92%8C%E6%B4%BB%E5%8A%A8%E8%AE%B0%E5%BD%95">静态链和活动记录</a></li>
+<li><a href="#%E5%B5%8C%E5%A5%97%E5%B1%82%E6%AC%A1%E6%98%BE%E7%A4%BA%E8%A1%A8display">嵌套层次显示表display</a></li>
+<li><a href="#pl%E5%85%A8%E5%B1%80display%E8%A1%A8">PL全局display表</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E7%AC%AC%E5%8D%81%E7%AB%A0-%E4%BC%98%E5%8C%96">第十章 优化</a><ul>
+<li><a href="#%E5%B1%80%E9%83%A8%E4%BC%98%E5%8C%96">局部优化</a><ul>
+<li><a href="#%E5%88%92%E5%88%86%E5%9F%BA%E6%9C%AC%E5%9D%97">划分基本块</a></li>
+<li><a href="#%E6%B5%81%E5%9B%BE">流图</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="第一章-引论"><a href="#第一章-引论" class="headerlink" title="第一章 引论"></a>第一章 引论</h2><h3 id="编译程序"><a href="#编译程序" class="headerlink" title="编译程序"></a>编译程序</h3><p><strong>翻译程序</strong>：把某一种语言程序等价地转换成另一种语言程序的程序。<br><strong>编译程序</strong>：把<strong>高级</strong>语言程序等价地转换成另一种<strong>低级</strong>语言程序的程序。<br><strong>解释程序</strong>：把源语言写的源程序作为输入，但<strong>不产生目标程序</strong>，而是<strong>边解释边执行</strong>源程序本身。</p>
+<h3 id="编译过程"><a href="#编译过程" class="headerlink" title="编译过程"></a>编译过程</h3><p>编译过程一般经过下列五个步骤：</p>
+<ul>
+<li>词法分析，识别出句子中的单词</li>
+<li>语法分析，分析句子的语法结构</li>
+<li>中间代码产生，根据句子的含义进行初步翻译</li>
+<li>优化，对译文进行修饰</li>
+<li>目标代码产生，写出最后的译文</li>
+</ul>
+<p><strong>词法分析</strong>：</p>
+<ul>
+<li>任务：输入源程序，对构成源程序的字符串进行扫描和分解，识别出一个个单次符号</li>
+<li>原则：构词规则（保留字、标识符、常数等）</li>
+<li>描述工具：有限自动机</li>
+</ul>
+<p><strong>语法分析</strong>：</p>
+<ul>
+<li>任务：在词法分析的基础上，根据语言的语法规则把单词符号串分解成各类语法单位</li>
+<li>原则：语法规则</li>
+<li>描述工具：上下文无关文法</li>
+</ul>
+<p><strong>中间代码产生</strong>：</p>
+<ul>
+<li>任务：对各类不同语法范畴按语言的语义进行初步翻译</li>
+<li>原则：语义规则</li>
+<li>中间代码：三元式、四元式、树形结构等<br><img src="https://www.nemotte.cn/wordpress/wp-content/uploads/2023/03/QQ%E6%88%AA%E5%9B%BE20230308105052.png"></li>
+</ul>
+<p><strong>优化</strong>：</p>
+<ul>
+<li>任务：对于前阶段产生的中间代码进行加工变换，以期在最后阶段产生更高效的目标代码</li>
+<li>原则：程序的等价变换</li>
+</ul>
+<p><strong>目标代码产生</strong>：</p>
+<ul>
+<li>任务：把中间代码变换成特定机器上的目标代码</li>
+<li>依赖于硬件系统结构和机器指令的含义</li>
+<li>目标代码有三种形式：</li>
+<li><ul>
+<li>绝对指令代码: 可直接运行</li>
+</ul>
+</li>
+<li><ul>
+<li>可重新定位指令代码: 需要连接装配</li>
+</ul>
+</li>
+<li><ul>
+<li>汇编指令代码: 需要进行汇编</li>
+</ul>
+</li>
+</ul>
+<h3 id="编译程序结构"><a href="#编译程序结构" class="headerlink" title="编译程序结构"></a>编译程序结构</h3><p><img src="https://www.nemotte.cn/wordpress/wp-content/uploads/2023/03/QQ%E6%88%AA%E5%9B%BE20230308105052-1.png"></p>
+<h4 id="表格与表格管理"><a href="#表格与表格管理" class="headerlink" title="表格与表格管理"></a>表格与表格管理</h4><p>编译程序在工作过程中需要保持一系列的表格，以登记源程序的各类信息和编译各阶段的进展状况。<br><strong>符号表</strong>：等级源程序中出现的每个名字以及名字的各种属性。<br>表格还有：常数表、入口名表、标号表和标号对应的代码形式表。</p>
+<h4 id="出错处理"><a href="#出错处理" class="headerlink" title="出错处理"></a>出错处理</h4><p><strong>出错处理程序</strong>：发现源程序中的错误，把有关错误信息（语法错误、语义错误）报告给用户。</p>
+<h4 id="遍pass"><a href="#遍pass" class="headerlink" title="遍pass"></a>遍pass</h4><p>所谓”遍”， 就是对源程序或源程序的中间表示从头到尾扫描一次。<br>阶段与遍是不同的概念。一遍可以由若干段组成，一个阶段也可以分若干遍来完成。</p>
+<h4 id="编译前端与后端"><a href="#编译前端与后端" class="headerlink" title="编译前端与后端"></a>编译前端与后端</h4><p><strong>编译前端</strong>：与源语言有关，如词法分析，语法分析，语义分析与中间代码产生，与机器无关的优化。<br><strong>编译后端</strong>：与目标机有关，与目标机有关的优化，目标代码产生。</p>
+<p>优点：减少对内存容量的要求，程序逻辑结构清晰; 优化更充分，有利于移植。<br>不足: 编译程序运行的效率低</p>
+<h3 id="编译程序生成"><a href="#编译程序生成" class="headerlink" title="编译程序生成"></a>编译程序生成</h3><p><strong>以汇编语言和机器语言为工具</strong><br>优点: 可以针对具体的机器，充分发挥计算机的系统功能。生成的程序效率高。<br>缺点: 程序难读、难写、易出错、难维护、生产的效率低。</p>
+<p><strong>高级语言书写</strong><br>利用已有的某种语言的编译程序实现另一语言的编译程序。<br>优点: 程序易读、易理解、容易维护、生产的效率高。<br>缺点: 难以充分发挥计算机的系统功能，生成的程序效率低。</p>
+<p><strong>自展技术</strong>：首先确定一个非常简单的核心语言 L1，用机器语言或汇编语言写出它的编译程序 T1，再把 L1 扩充到 L1+L2，并用 L1编写它的编译程序 T2，……，直到获得要求的编译程序。这种通过一系列自展途径形成编译程序的过程叫自编译过程。</p>
+<h2 id="第二章-高级语言及其语法描述"><a href="#第二章-高级语言及其语法描述" class="headerlink" title="第二章 高级语言及其语法描述"></a>第二章 高级语言及其语法描述</h2><h3 id="程序语言的定义"><a href="#程序语言的定义" class="headerlink" title="程序语言的定义"></a>程序语言的定义</h3><h4 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h4><p><strong>语法</strong>：一组规则，用它可以形成和产生一 个合式(well-formed)的程序。</p>
+<p><strong>词法规则</strong>：单词符号的形成规则。描述工具是有限自动机。</p>
+<p><strong>语法规则</strong>：语法单位的形成规则。描述工具是上下文无关文法。</p>
+<p>语法规则和词法规则定义了程序的的形式结构。</p>
+<h4 id="语义"><a href="#语义" class="headerlink" title="语义"></a>语义</h4><p><strong>语义</strong>：一组规则，用它可以定义一个程序的意义。</p>
+<p><strong>描述方法</strong>：</p>
+<ul>
+<li>自然语言描述：可能存在隐藏错误、二义性和不完整性</li>
+<li>形式描述</li>
+</ul>
+<h3 id="程序语言的基本功能和层次结构"><a href="#程序语言的基本功能和层次结构" class="headerlink" title="程序语言的基本功能和层次结构"></a>程序语言的基本功能和层次结构</h3><p>程序语言的基本功能是描述数据和对数据的运算。</p>
+<p>程序：</p>
+<ul>
+<li>子程序或分程序</li>
+<li><ul>
+<li>语句</li>
+<li><ul>
+<li>表达式</li>
+<li><ul>
+<li>数据引用</li>
+<li>算符</li>
+<li>函数调用</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="高级语言的一般特性"><a href="#高级语言的一般特性" class="headerlink" title="高级语言的一般特性"></a>高级语言的一般特性</h3><h4 id="高级语言的分类"><a href="#高级语言的分类" class="headerlink" title="高级语言的分类"></a>高级语言的分类</h4><p><strong>强制式语言</strong>：也称过程式语言，命令驱动，面向语句。</p>
+<p><strong>应用式语言</strong>：注重程序所表示的功能，而不是一个语句接一个语句地执行。</p>
+<p><strong>基于规则的语言</strong>：检查一定的条件，当它满足值，则执行适当的动作。</p>
+<p><strong>面向对象语言</strong>：封装性、继承性和多态性。</p>
+<h4 id="程序结构"><a href="#程序结构" class="headerlink" title="程序结构"></a>程序结构</h4><p><strong>FORTRAN</strong>：</p>
+<ul>
+<li>一个FORTRAN程序由一个主程序段和若干个辅程序段组成</li>
+<li>辅程序段可以是子程序、函数段或数据块</li>
+<li>每个程序段有一系列的说明语句和执行语句组成，各段可以独立编译</li>
+<li>模块结构，没有嵌套和递归</li>
+<li>各程序段中的名字相互独立，同一个标识符在不同程序段中代表不同的名字</li>
+</ul>
+<p><strong>PASCAL</strong>：</p>
+<ul>
+<li><p>PASCAL程序本身可以看成是一个操作系统所调用的过程，过程可以嵌套和递归</p>
+</li>
+<li><p>作用域：一个名字能被使用的区域范围称作这个名字的作用域</p>
+</li>
+<li><p>允许用同一个标识符在不同的过程中代表不同的名字</p>
+</li>
+<li><p><strong>最近嵌套原则</strong>：一个在子程序B1中说明的名字X只在B1中有效（局部于B1）如果B2是B1的一个内层子程序且B2中对标识符X没有新的说明，则原来的名字X在B2中仍然有效。如果B2对X重新作了说明， 那么，B2对X的任何引用都是指重新说明过的这个X</p>
+</li>
+<li><p>PASCAL提供了丰富的数据类型和运算方式，它允许用户动态地申请和退还存贮空间</p>
+</li>
+</ul>
+<p><strong>ADA</strong>：</p>
+<ul>
+<li>程序包：把数据和操作代码封装在一起，支持数据抽象</li>
+<li>一个程序包分为两部分：</li>
+<li><ul>
+<li>可见的规范说明部分，它定义了程序包外面可以访问的对象</li>
+<li>程序包体，它实际定义程序包的实现细节</li>
+</ul>
+</li>
+</ul>
+<p><strong>JAVA</strong>：</p>
+<ul>
+<li>一种面向对象的高级语言</li>
+</ul>
+<h4 id="数据类型与操作"><a href="#数据类型与操作" class="headerlink" title="数据类型与操作"></a>数据类型与操作</h4><p>一个数据类型通常包括以下三种要素：</p>
+<ul>
+<li>用于区别这种类型数据对象的属性</li>
+<li>这种类型的数据对象可以具有的值</li>
+<li>可以作用于这种类型的数据对象的操作</li>
+</ul>
+<h4 id="标识符与名字"><a href="#标识符与名字" class="headerlink" title="标识符与名字"></a>标识符与名字</h4><p><strong>标识符</strong>：以字母开头的，由字母数字组成的字符串。</p>
+<p>标识符与名字的区别在于：</p>
+<ul>
+<li>标识符是语法概念</li>
+<li>名字有确切的意义和属性</li>
+</ul>
+<p>一个名字的属性包括<strong>类型</strong>和<strong>作用域</strong>。</p>
+<h4 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h4><p><strong>数组</strong>：</p>
+<ul>
+<li>逻辑上，数组是由同一类型数据所组成的某种n维矩形结构，沿着每一维的距离称为下标</li>
+</ul>
+<p><strong>内情向量</strong>：把数组的有关信息记录在一个“内情向量”中，每个数组的内情向量必须包括：维数，各维的上、下限，首地址，以及数组（元素）的类型。</p>
+<p><strong>记录</strong></p>
+<p>逻辑上说，记录结构由已知类型的数据组合在一起的一种结构。</p>
+<p>域的地址计算：相对于记录结构起点的相对数OFFSET。</p>
+<p><strong>字符串、表格、栈</strong></p>
+<h4 id="抽象数据类型"><a href="#抽象数据类型" class="headerlink" title="抽象数据类型"></a>抽象数据类型</h4><p>一个抽象数据类型包括：</p>
+<ul>
+<li>数据对象的一个集合</li>
+<li>作用于这些数据对象的抽象运算的集合</li>
+<li>这种类型对象的封装，用户只能使用类型定义的运算</li>
+</ul>
+<h3 id="语句与控制结构"><a href="#语句与控制结构" class="headerlink" title="语句与控制结构"></a>语句与控制结构</h3><p>表达式由运算量和算符组成。</p>
+<p>对于多数程序语言来说，表达式的形成规则可概括为：</p>
+<ul>
+<li>变量、常数是表达式</li>
+<li>若E1、E2为表达式，<code>$$\theta$$</code>是一个二元算符，则<code>$$E1\theta E2$$</code>是表达式</li>
+<li>若E是表达式，<code>$$\theta$$</code>是一个一元算符，则<code>$$\theta E$$</code>是表达式</li>
+<li>若E是表达式，则(E)是表达式</li>
+</ul>
+<h4 id="语句"><a href="#语句" class="headerlink" title="语句"></a>语句</h4><p><strong>赋值语句</strong>：A :&#x3D; B</p>
+<p>名字左值：该名字代表的那个单元称为该名字的左值。</p>
+<p>右值：一个名字的值称为该名字的右值。</p>
+<p><strong>控制语句</strong></p>
+<p><strong>说明句</strong>：旨在定义名字的性质。定义各种不同数据类型的变量或运算。</p>
+<p><strong>简单句和复合句</strong></p>
+<h3 id="程序语言的语法描述"><a href="#程序语言的语法描述" class="headerlink" title="程序语言的语法描述"></a>程序语言的语法描述</h3><h4 id="上下文无关文法"><a href="#上下文无关文法" class="headerlink" title="上下文无关文法"></a>上下文无关文法</h4><p><strong>文法</strong>：描述语言的语法结构的形式规则</p>
+<p>一个上下文无关文法G是一个四元式<br><code>$$G=(V_T,V_N,S,P)$$</code><br>其中四个符号分别代表：</p>
+<ul>
+<li>终结符集合：是一个语言的不可再分的基本符号</li>
+<li>非终结符集合：代表一个一定的语法概念</li>
+<li>文法的开始符号：特殊的非终结符号</li>
+<li>产生式集合：定义语法范畴的一种书写规则，如下述举例：</li>
+<li><ul>
+<li>E→i对应a</li>
+<li>E→E+E对应a+b</li>
+<li>E→E*E对应a*b</li>
+<li>E→(E)对应(a)</li>
+</ul>
+</li>
+</ul>
+<p>表示一个文法时，通常只给出开始符号和产生式。</p>
+<p><strong>推出</strong>：称<code>$$aAb$$</code>直接推出<code>$$a\gamma b$$</code>，仅当<code>$$A\rightarrow \gamma$$</code>是一个产生式，且<code>$$a,b\in (V_T\cup V_N)^*$$</code></p>
+<p>假定G是一个文法，S是它的开始符号。如果S经过0步或若干步可以推出a，则称<strong>a是一个句型</strong>。<strong>仅含终结符号的句型是一个句子</strong>。**文法G所产生的句子的全体是一个语言，记为L(G)**。</p>
+<p><strong>最左推导</strong>：任何一步推导都是对a的最左非终结符进行替换。<br><strong>最右推导</strong>：任何一步推导都是对a的最右非终结符进行替换。也称规范推导。</p>
+<h4 id="语法树与二义性"><a href="#语法树与二义性" class="headerlink" title="语法树与二义性"></a>语法树与二义性</h4><p>用一张图表示一个句型的推导，称为语法树。<br>若一个文法中存在某个句子，它有两个不同的最左（右）推导，那么这个文法是<strong>二义</strong>的。<br>若对于一个语言，不存在无二义性的文法，则这个语言是二义的。</p>
+<p>文法的二义性和语言的二义性是两个不同的概念。可能存在两个不同的文法，一个是二义的而另一个不是二义的，但是它们产生的语言是相同的。</p>
+<p>描述程序设计语言时，对于上下文无关文法的限制：</p>
+<ul>
+<li>不含P→P形式的产生式</li>
+<li>每个非终结符P必须有用处</li>
+</ul>
+<h4 id="形式语言鸟瞰"><a href="#形式语言鸟瞰" class="headerlink" title="形式语言鸟瞰"></a>形式语言鸟瞰</h4><p>Chomsky于1956年建立形式语言体系，他把文法分成四种类型：0，1，2，3型。</p>
+<h5 id="0型文法"><a href="#0型文法" class="headerlink" title="0型文法"></a>0型文法</h5><p>短语文法，图灵机<br>产生式形如：<code>$$a\rightarrow \beta$$</code><br>其中：<code>$$a\in (V_T \cup V_n)^*$$</code>至少含有一个非终结符；<code>$$\beta \in (V_T \cup V_N)^*$$</code>。</p>
+<h5 id="1型文法"><a href="#1型文法" class="headerlink" title="1型文法"></a>1型文法</h5><p>上下文有关文法，线性界限自动机<br>产生式形如：<code>$$a\rightarrow \beta$$</code><br>其中<code>$$|a| \leq |\beta|$$</code>，仅<code>$$S\rightarrow \epsilon$$</code>例外。</p>
+<h5 id="2型文法"><a href="#2型文法" class="headerlink" title="2型文法"></a>2型文法</h5><p>上下文无关文法，非确定下推自动机<br>产生式形如：<code>$$A\rightarrow \beta$$</code><br>其中：<code>$$A\in V_N; \beta \in (V_T \cup V_n)^*$$</code>。</p>
+<h5 id="3型文法"><a href="#3型文法" class="headerlink" title="3型文法"></a>3型文法</h5><p>正规文法，有限自动机<br>产生式形如：<code>$$A\rightarrow aB | A\rightarrow a$$</code><br>其中：<code>$$a\in V_T^*; A,B\in V_N$$</code>。右线性文法。</p>
+<h2 id="第三章-词法分析"><a href="#第三章-词法分析" class="headerlink" title="第三章 词法分析"></a>第三章 词法分析</h2><h3 id="对词法分析器的要求"><a href="#对词法分析器的要求" class="headerlink" title="对词法分析器的要求"></a>对词法分析器的要求</h3><h4 id="词法分析器的功能和输出形式"><a href="#词法分析器的功能和输出形式" class="headerlink" title="词法分析器的功能和输出形式"></a>词法分析器的功能和输出形式</h4><p><strong>功能</strong>：输入源程序、输出单词符号。<br><strong>单词符号的种类</strong>：</p>
+<ul>
+<li>基本字：如begin，repeat</li>
+<li>标识符：如变量名、数组名、过程名</li>
+<li>常数</li>
+<li>运算符</li>
+<li>界符：逗号，分号，括号，空格</li>
+</ul>
+<p><strong>输出单次符号的表示形式</strong>：（单词种别，值）<br>单词种别通常用整数编码表示。<br>若一个种别只有一个单词符号，则种别编码就代表该单词符号。假定基本字、运算符和界符都是一符一种。<br>若一个种别有多个单词符号，则对于每个单词符号，给出种别编码和自身的值。<br>标识符单列一种；标识符自身的值表示成按机器字节划分的内部码。<br>常数按类型分种；常数的值则表示成标准的二进制形式。</p>
+<p>例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (i&gt;=j) i--;</span><br></pre></td></tr></table></figure>
+
+<p>输出单词符号：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;while, -&gt;</span><br><span class="line">&lt;(, -&gt;</span><br><span class="line">&lt;id, 指向i符号表项的指针&gt;</span><br><span class="line">&lt;&gt;=, -&gt;</span><br><span class="line">&lt;id, 指向j的符号表项的指针&gt;</span><br><span class="line">&lt;), -&gt;</span><br><span class="line">&lt;id, 指向i的符号表项的指针&gt;</span><br><span class="line">&lt;--, -&gt;</span><br><span class="line">&lt;;, -&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="词法分析器作为一个独立的子程序"><a href="#词法分析器作为一个独立的子程序" class="headerlink" title="词法分析器作为一个独立的子程序"></a>词法分析器作为一个独立的子程序</h4><p>作为独立阶段的优点：结构简洁、清晰和条理化，有利于集中考虑词法分析一些枝节问题。<br>不作为一遍：将其处理为一个子程序。</p>
+<h3 id="词法分析器的设计"><a href="#词法分析器的设计" class="headerlink" title="词法分析器的设计"></a>词法分析器的设计</h3><p><img src="https://www.nemotte.cn/wordpress/wp-content/uploads/2023/03/QQ%E6%88%AA%E5%9B%BE20230412104429.png"></p>
+<h4 id="输入、预处理"><a href="#输入、预处理" class="headerlink" title="输入、预处理"></a>输入、预处理</h4><p>输入串放在输入缓冲区中。<br>预处理子程序：剔除无用的空白、跳格、回车等编辑性字符；区分标号区、捻接续行和给出句末符等。</p>
+<p><strong>扫描缓冲区</strong>：<br>一个指示token起点，一个搜索token终点。可将字串先放入一个半区，搜到边缘仍未结束则将后续字串放入另一个半区。<br>标识符和常数的长度必须受限，小于缓冲区半区长度。</p>
+<h4 id="单词符号的识别：超前搜索"><a href="#单词符号的识别：超前搜索" class="headerlink" title="单词符号的识别：超前搜索"></a>单词符号的识别：超前搜索</h4><p>对于关键字的识别，如果不存在关键字特殊保护，那么就需要超前搜索后续字符，来区分关键字和用户定义标识符。</p>
+<p>对于常数识别，有些也需要超前搜索。</p>
+<h4 id="状态转换图"><a href="#状态转换图" class="headerlink" title="状态转换图"></a>状态转换图</h4><p>转换图是一张有限方向图。在状态转换图中，结点代表状态，用圆圈表示。状态之间用箭头连接。箭头标记代表在射出节点状态下可能出现的输入字符或字符类。</p>
+<p>若：</p>
+<ul>
+<li>所有基本字都是保留字;用户不能用它们作自己的标识符；</li>
+<li>基本字作为特殊的标识符来处理;不用特殊的状态图来识别，只要查保留字表；</li>
+<li>如果基本字、标识符和常数(或标号)之间没有确定的运算符或界符作间隔，则必须使用一个空白符作间隔，<br>则不必使用超前搜索。</li>
+</ul>
+<p>将每个状态节点对应一小段程序，可以实现状态转换图：</p>
+<ul>
+<li>对不含回路的分叉结点，可以用一个CASE语句或者一组IF-ELSE实现</li>
+<li>对含回路的状态结，可对应一段由WHILE结构和IF语句构成的程序</li>
+<li>终态结点表示识别出某种单词符号，对应语句为RETURN</li>
+</ul>
+<h3 id="正规表达式与有限自动机"><a href="#正规表达式与有限自动机" class="headerlink" title="正规表达式与有限自动机"></a>正规表达式与有限自动机</h3><h4 id="正规式和正规集"><a href="#正规式和正规集" class="headerlink" title="正规式和正规集"></a>正规式和正规集</h4><p>正规集可以用正规式表示。一个由字构成的集合是正规集，当且仅当它能用正规式表示。</p>
+<p>递归定义：<br>对于给定的字母表<code>$$\sum $$</code></p>
+<ul>
+<li><code>$$\epsilon$$</code>和<code>$$\emptyset$$</code>都是<code>$$\sum $$</code>上的正规式，它们所表示的正规集为<code>$$\&#123;\epsilon\&#125;, \emptyset$$</code></li>
+<li>任何<code>$$a \in \sum$$</code>，<code>$$a$$</code>是<code>$$\sum $$</code>上的正规式，它所表示的正规集为<code>$$\&#123;a\&#125;$$</code></li>
+<li>假定<code>$$e_1,e_2$$</code>都是<code>$$\sum$$</code>上的正规式，它们所表示的正规集为<code>$$L(e_1), L(e_2)$$</code>，则</li>
+<li><ul>
+<li><code>$$(e_1|e_2)$$</code>为正规式，它所表示的正规集为<code>$$L(e_1) \cup L(e_2)$$</code></li>
+</ul>
+</li>
+<li><ul>
+<li><code>$$(e_1·e_2)$$</code>为正规式，它所表示的正规集为<code>$$L(e_1)L(e_2)$$</code></li>
+</ul>
+</li>
+<li><ul>
+<li><code>$$(e_1)^*$$</code>为正规式，它所表示的正规集为<code>$$(L(e_1))^*$$</code><br>仅由有限次使用上述三步骤定义的表达式才是<code>$$\sum$$</code>上的正规式，仅由这些正规式表示的子集才是<code>$$\sum$$</code>上的正规集。</li>
+</ul>
+</li>
+</ul>
+<h4 id="确定有限自动机DFA"><a href="#确定有限自动机DFA" class="headerlink" title="确定有限自动机DFA"></a>确定有限自动机DFA</h4><p>自动机M是一个五元式<code>$$M=(S,\sum,f,S_0,F)$$</code>，其中项依次为：</p>
+<ul>
+<li>有穷状态集</li>
+<li>输入字母表</li>
+<li>状态转换函数</li>
+<li>S的唯一初态</li>
+<li>终态集</li>
+</ul>
+<h4 id="非确定有限自动机NFA"><a href="#非确定有限自动机NFA" class="headerlink" title="非确定有限自动机NFA"></a>非确定有限自动机NFA</h4><p>一个NFA是一个五元式<code>$$M=(S,\sum,f,S_0,F)$$</code>，其中项以此为：</p>
+<ul>
+<li>有穷状态集</li>
+<li>输入字母表</li>
+<li>状态转换函数</li>
+<li>非空的初态集</li>
+<li>终态集</li>
+</ul>
+<p>DFA是NFA的特例。</p>
+<p>对于任何两个有限自动机M和M’，如果<code>$$L(M) = L(M&#39;)$$</code>则二者等价。</p>
+<h4 id="NFA确定化"><a href="#NFA确定化" class="headerlink" title="NFA确定化"></a>NFA确定化</h4><p>对于每个NFA存在一个DFA，二者等价。</p>
+<p>对于一个NFA，进行如下改造：</p>
+<ul>
+<li>引进新初态终态X和Y，其不属于S。将X到<code>$$S_0$$</code>中任意状态连一条<code>$$\epsilon$$</code>弧，从F中任意状态连一条<code>$$\epsilon$$</code>弧到Y</li>
+<li>按照下面三条规则分裂所有弧</li>
+</ul>
+<p><img src="https://www.nemotte.cn/wordpress/wp-content/uploads/2023/03/QQ%E6%88%AA%E5%9B%BE20230618083610.png"></p>
+<p>采用子集法确定化上述NFA。</p>
+<ul>
+<li>将初态X及其经过任意条<code>$$\epsilon$$</code>弧能到达的状态放入初始集合中</li>
+<li>对于在字符表中的所有字符，写出其从初始集合的任意状态经过1条此字符的弧后，经过任意条<code>$$\epsilon$$</code>弧能到达的所有状态的集合</li>
+<li>如果上述集合不在表的第一列，则将其加入第一列</li>
+<li>重复上述步骤，直到没有新的集合</li>
+<li>将所有集合标号，相同集合标相同的号，将其视为状态转换矩阵画出DFA</li>
+</ul>
+<p><img src="https://www.nemotte.cn/wordpress/wp-content/uploads/2023/03/QQ%E6%88%AA%E5%9B%BE20230618083610-1.png"></p>
+<h4 id="正规文法与有限自动机等价性"><a href="#正规文法与有限自动机等价性" class="headerlink" title="正规文法与有限自动机等价性"></a>正规文法与有限自动机等价性</h4><p><img src="https://www.nemotte.cn/wordpress/wp-content/uploads/2023/03/QQ%E6%88%AA%E5%9B%BE20230618083610-2.png"></p>
+<p>对右线性文法，创建一个新状态f，所有文法中的非终结符经过其能推导到的非终结符左侧所有终结符组成的弧到达此非终结符。如果推导中不含非终结符，则将其连入f。</p>
+<p>对有限自动机M，如果其终态可以射出一条弧到达出错处理状态，则任何连入此终态的弧，其对应的文法需要加入一个不含非终结符的推导。</p>
+<p><img src="https://www.nemotte.cn/wordpress/wp-content/uploads/2023/03/QQ%E6%88%AA%E5%9B%BE20230618083610-3.png"></p>
+<p>左线性文法考虑每个状态射入的弧。</p>
+<p><img src="https://www.nemotte.cn/wordpress/wp-content/uploads/2023/03/QQ%E6%88%AA%E5%9B%BE20230618083610-4.png"></p>
+<h4 id="正规式与有限自动机等价性"><a href="#正规式与有限自动机等价性" class="headerlink" title="正规式与有限自动机等价性"></a>正规式与有限自动机等价性</h4><p><img src="https://www.nemotte.cn/wordpress/wp-content/uploads/2023/03/QQ%E6%88%AA%E5%9B%BE20230618083610-5.png"></p>
+<p>按上述规则分裂。</p>
+<h4 id="DFA最小化"><a href="#DFA最小化" class="headerlink" title="DFA最小化"></a>DFA最小化</h4><p>寻找一个状态数比M少的DFA，使两个DFA等价。</p>
+<p>把M的状态集划分为一些不相交的子集，使得任何两个不同子集的状态是可区别的，而同一子集的任何两个状态是等价的。最后，让每个子集选出一个代表，同时消去其它状态。</p>
+<h2 id="第四章-语法分析——自上而下分析"><a href="#第四章-语法分析——自上而下分析" class="headerlink" title="第四章 语法分析——自上而下分析"></a>第四章 语法分析——自上而下分析</h2><h3 id="上下文无关文法的定义"><a href="#上下文无关文法的定义" class="headerlink" title="上下文无关文法的定义"></a>上下文无关文法的定义</h3><p>一个上下文无关文法G是一个四元式<code>$$G=(V_T,V_N,S,P)$$</code>。</p>
+<h3 id="语法分析的方法"><a href="#语法分析的方法" class="headerlink" title="语法分析的方法"></a>语法分析的方法</h3><p>自下而上分析法：从输入串开始，逐步进行归约，直到文法的开始符号。根据文法的产生式规则，把产生式的右部替换成左部符号。</p>
+<p>自上而下分析法：从文法开始符号出发，利用各种产生式规则，寻找匹配的推导。</p>
+<h4 id="自上而下分析面临的问题"><a href="#自上而下分析面临的问题" class="headerlink" title="自上而下分析面临的问题"></a>自上而下分析面临的问题</h4><p>分析过程中，可能走入暂时成功的匹配，后续会出错，需要回溯。<br>对于左递归的文法，会使得分析进入无限循环。</p>
+<h3 id="LL-1-分析法"><a href="#LL-1-分析法" class="headerlink" title="LL(1)分析法"></a>LL(1)分析法</h3><h4 id="左递归的消除"><a href="#左递归的消除" class="headerlink" title="左递归的消除"></a>左递归的消除</h4><p>一般而言，假定P关于的全部产生式是<br><code>$$P\rightarrow Pa_1|Pa_2|...|Pa_m|b_1|b_2|...|b_n$$</code><br>那么，消除P的直接左递归就是把这个规则改写成<br><code>$$P\rightarrow b_1P&#39;|b_2P&#39;|...|b_nP&#39;$$</code><br><code>$$P&#39;\rightarrow a_1P&#39;|a_2P&#39;|...|a_mP&#39;|\epsilon $$</code></p>
+<p>间接左递归也算左递归。</p>
+<p>将间接左递归的推导代入，直到得到直接左递归的推导。然后改写成右递归形式，去除多余的规则即可。</p>
+<h4 id="消除回溯，提左因子"><a href="#消除回溯，提左因子" class="headerlink" title="消除回溯，提左因子"></a>消除回溯，提左因子</h4><p>假定关于A的规则是<br><code>$$A\rightarrow \delta b_1|\delta b_2|...|\delta b_n|\gamma_1|\gamma_2|...|\gamma_m $$</code><br>那么可以把这些规则改写成<br><code>$$A\rightarrow \delta A&#39;|\gamma_1|\gamma_2|...|\gamma_m $$</code><br><code>$$A&#39;\rightarrow b_1|b_2|...|b_n $$</code></p>
+<p>经过反复提取左因子，能把每个非终结符的所有候选首符集变成为两两不相交。</p>
+<h4 id="FIRST、FOLLOW集合"><a href="#FIRST、FOLLOW集合" class="headerlink" title="FIRST、FOLLOW集合"></a>FIRST、FOLLOW集合</h4><p>令G是一个不含左递归的文法，对G的所有非终结符的每个候选a定义它的终结首符集FIRST(a)为下述字符组成的集合：</p>
+<ul>
+<li>所有能直接推出的最左终结符（包括<code>$$\epsilon $$</code>）</li>
+<li>在文法中出现在此非终结符紧左的终结符</li>
+<li>若某个推导中，最左侧为非终结符，此非终结符的FIRST集合的所有元素</li>
+<li>如果上述最左的非终结符可以推出<code>$$\epsilon$$</code>，则考虑其紧右的符号，如是终结符，将其加入集合，如是非终结符，考虑第三条规则</li>
+</ul>
+<p>求出文法G的所有非终结符的FOLLOW集合为下述字符组成的集合：</p>
+<ul>
+<li>G中直接位于此非终结符紧右的终结符（对于开始符号，终止符属于FOLLOW集合）</li>
+<li>G中直接位于此非终结符紧右的非终结符的FIRST集合的所有元素</li>
+<li>若此非终结符位于一个推导的最右侧，此推导的源终结符的FOLLOW集合的所有元素</li>
+</ul>
+<p>如果一个文法不含左递归，每一个非终结符的各个推导的FIRST集合两两不相交，且对于每个非终结符A，若它存在某个候选首符集包含<code>$$\epsilon$$</code>，其FIRST集合和FOLLOW集合不相交，则称此文法为LL(1)文法。</p>
+<h3 id="递归下降分析程序构造"><a href="#递归下降分析程序构造" class="headerlink" title="递归下降分析程序构造"></a>递归下降分析程序构造</h3><p>LL(1)文法可以构造递归下降分析程序。</p>
+<p>递归下降分析程序的出错处理可以在主程序中统一执行，也可以在每个终结符对应的函数内部执行。</p>
+<h3 id="预测分析程序"><a href="#预测分析程序" class="headerlink" title="预测分析程序"></a>预测分析程序</h3><p>又叫LL(1)分析法，包括：</p>
+<ul>
+<li>总控程序</li>
+<li>分析表M[A,a]矩阵</li>
+<li>分析栈，存放文法符号</li>
+</ul>
+<p>总控程序根据现行栈顶符号X和大当前输入符号a执行下列三种动作之一：</p>
+<ul>
+<li>若X&#x3D;a&#x3D;’#’，则宣布分析成功，停止分析</li>
+<li>若X&#x3D;a不等于终止符，则把X从栈顶逐出，让a指向下一个输入符号</li>
+<li>若X是一个非终结符，则查看分析表M</li>
+<li><ul>
+<li>若M中存放一个关于X的产生式，把X逐出战斗顶，把产生式的右部符号串按照反序一一推进栈</li>
+</ul>
+</li>
+<li><ul>
+<li>若对应出错，则调用ERROR</li>
+</ul>
+</li>
+</ul>
+<h4 id="构造分析表"><a href="#构造分析表" class="headerlink" title="构造分析表"></a>构造分析表</h4><p>首先构造每个非终结符A及其任意候选a的FIRST(a)和FOLLOW(A)集合。<br><img src="https://www.nemotte.cn/wordpress/wp-content/uploads/2023/03/QQ%E6%88%AA%E5%9B%BE20230618083610-6.png"></p>
+<p>利用上述集合构造分析表：</p>
+<ul>
+<li>对每个产生式执行2和3步</li>
+<li>对每个终结符<code>$$a\in FIRST(a)$$</code>，把<code>$$A\rightarrow a$$</code>加入M[A,a]中</li>
+<li>若<code>$$\epsilon \in FIRST(a)$$</code>，把任何<code>$$b\in FOLLOW(B)$$</code>把<code>$$A\rightarrow a$$</code>加入M[A,b]中</li>
+<li>把所有无定义的M[A,a]加上出错标志</li>
+</ul>
+<p><img src="https://www.nemotte.cn/wordpress/wp-content/uploads/2023/03/QQ%E6%88%AA%E5%9B%BE20230618083610-7.png"></p>
+<p>如果G是左递归或二义的，那么，M至少含有一个多重定义入口。因此，消除左递归和提取左因子将有助于获得无多重定义的分析表M。一个文法G的预测分析表不含多定义入口，当且仅当该文法为LL(1)。</p>
+<h2 id="第五章-语法分析——自下而上分析"><a href="#第五章-语法分析——自下而上分析" class="headerlink" title="第五章 语法分析——自下而上分析"></a>第五章 语法分析——自下而上分析</h2><h3 id="归约"><a href="#归约" class="headerlink" title="归约"></a>归约</h3><p>用一个寄存符号的先进后出栈，把输入符号一个一个地移进到栈里，当栈顶形成某个产生式的候选式时，即把栈顶的这一部分替换成(归约为)该产生式的左部符号。<br>自下而上的分析要解决的核心问题：<strong>识别可归约串</strong>。</p>
+<h4 id="规范规约"><a href="#规范规约" class="headerlink" title="规范规约"></a>规范规约</h4><p>在一个句型对应的语法树中，以某非终结符为根的两代以上的子树的所有末端结点从左到右排列就是相对于该非终结符的一个短语，如果子树只有两代，则该短语就是直接短语。<br>最左直接短语就是句柄。</p>
+<p>假定a是文法G的一个句子，我们称<code>$$a_n, a_&#123;n-1&#125;,...,a_0$$</code>是一个规范归约，如果：</p>
+<ul>
+<li><code>$$a_n = a$$</code></li>
+<li><code>$$a_0$$</code>为文法的开始符号S</li>
+<li>对任何i，<code>$$0 \leq i \leq n$$</code>，<code>$$a_&#123;i-1&#125;$$</code>是从<code>$$a_i$$</code>经把句柄替换成相应产生式左部符号得到的</li>
+</ul>
+<p>规范归约是最右推导的逆过程。由规范推导推出的句型称为规范句型。</p>
+<h3 id="LR分析法"><a href="#LR分析法" class="headerlink" title="LR分析法"></a>LR分析法</h3><h4 id="LR分析器"><a href="#LR分析器" class="headerlink" title="LR分析器"></a>LR分析器</h4><p>LR分析器核心是分析表：</p>
+<ul>
+<li>ACTION[s,a]：当状态s面临符号a时，应采取什么动作</li>
+<li>GOTO[s,X]：当状态s面临符号X时，下一个跳转的状态</li>
+</ul>
+<p>每一项ACTION的规定的四种动作：</p>
+<ul>
+<li>移进：把(s,a)的下一状态s’和输入符号a推进栈，下一输入符号变成现行输入符号</li>
+<li>归约：利用某产生式<code>$$A\rightarrow b$$</code>归约，设b长度为r，归约动作是，去除栈顶r个项，使<code>$$s_&#123;m-r&#125;$$</code>变成栈顶状态，然后把下一状态s’&#x3D;GOTO[<code>$$s_&#123;m-r&#125;$$</code>, A]和文法符号A推进栈</li>
+<li>接收：宣布分析成功</li>
+<li>报错</li>
+</ul>
+<p>对于一个文法，如果能够构造一张分析表，使得它的每个入口均是唯一确定的，则这个文法就称为LR文法。<br>一个文法，如果能用一个每步顶多向前检查k个输入符号的LR分析器进行分析，则这个文法就称为LR(k)文法。</p>
+<h4 id="LR-0-项目集族和分析表构造"><a href="#LR-0-项目集族和分析表构造" class="headerlink" title="LR(0)项目集族和分析表构造"></a>LR(0)项目集族和分析表构造</h4><p>活前缀：指规范句型的一个前缀，这种前缀不含句柄之后的任何符号。<br>LR分析就是保证栈中总是活前缀。</p>
+<p>文法G的每个产生式的右部添加一个圆点称为G的LR(0)项目。</p>
+<p><img src="https://www.nemotte.cn/wordpress/wp-content/uploads/2023/03/QQ%E6%88%AA%E5%9B%BE20230618083610-8.png"></p>
+<p>加入新初态称为唯一的接受态，形成拓广文法G’。</p>
+<p>令每个项目集<code>$$I_k$$</code>的下标k作为分析器的状态，包含拓广文法的唯一接收态集合的下标k作为分析器初态。<br>根据DFA构造分析表，对每个箭弧：</p>
+<ul>
+<li>若箭弧标注非终结符a，对于箭弧起点状态S，终点状态S’，标注ACTION[S,a]&#x3D;sS’</li>
+<li>若箭弧标注终结符A，对于箭弧起点状态S，终点状态S’，标注GOTO[S,A]&#x3D;S’</li>
+<li>若状态存在归约项目（记归约用产生式顺序为N）</li>
+<li><ul>
+<li>状态为唯一接收态，标注ACTION[S,#]&#x3D;acc</li>
+</ul>
+</li>
+<li><ul>
+<li>状态不为唯一接收态，对每个终结符a（包括#），标注ACTION[S,a]&#x3D;rN</li>
+</ul>
+</li>
+<li>其余区域填上报错标志</li>
+</ul>
+<h4 id="SLR分析表构造"><a href="#SLR分析表构造" class="headerlink" title="SLR分析表构造"></a>SLR分析表构造</h4><p>假定一个LR(0)规范族中含有如下的一个项目集状态<code>$$I=\&#123;X\rightarrow a·b\beta, A\rightarrow a·, B\rightarrow a·\&#125;$$</code>。A和B的FOLLOW集合交集为空，且不包含b，那么当状态I面临任何输入符号a时，可以：</p>
+<ul>
+<li>若a&#x3D;b则移进</li>
+<li>若a属于A或B的FOLLOW集合，则用产生式A→a或B→a进行归约</li>
+<li>此外，报错</li>
+</ul>
+<p>上述冲突性动作解决方案叫做SLR(1)解决办法。</p>
+<p>SLR(1)分析表构造方法：</p>
+<ul>
+<li>若箭弧标注非终结符a，对于箭弧起点状态S，终点状态S’，标注ACTION[S,a]&#x3D;sS’</li>
+<li>若箭弧标注终结符A，对于箭弧起点状态S，终点状态S’，标注GOTO[S,A]&#x3D;S’</li>
+<li>若状态存在归约项目（记归约用产生式顺序为N）</li>
+<li><ul>
+<li>状态为唯一接收态，标注ACTION[S,#]&#x3D;acc</li>
+</ul>
+</li>
+<li><ul>
+<li>状态不为唯一接收态，对每个终结符a（包括#）**如果属于FOLLOW(A)**（与LR(0)不同），标注ACTION[S,a]&#x3D;rN</li>
+</ul>
+</li>
+<li>其余区域填上报错标志</li>
+</ul>
+<p>SLR(1)利用FOLLOW获得的超前符号集合可能大于实际能出现的超前符号集合（很多文法并非SLR(1)）。也就是说，FOLLOW集合提供的信息太泛。</p>
+<h4 id="LR-1-分析表构造"><a href="#LR-1-分析表构造" class="headerlink" title="LR(1)分析表构造"></a>LR(1)分析表构造</h4><p>项目集I的闭包CLOSURE(I)构造方法：</p>
+<ul>
+<li>I的任何项目都属于CLOSURE(I)</li>
+<li>若项目<code>$$A\rightarrow \alpha·B\beta, a$$</code>属于CLOSURE(I)，<code>$$B\rightarrow \sigma$$</code>是一个产生式，那么对于<code>$$FIRST(\beta a)$$</code>中的每个终结符b，如果<code>$$B\rightarrow ·\sigma,b$$</code>原来不在CLOSURE(I)中，则加入</li>
+<li>反复执行2，直到不能继续</li>
+</ul>
+<h4 id="LALR-1-构造"><a href="#LALR-1-构造" class="headerlink" title="LALR(1)构造"></a>LALR(1)构造</h4><p>合并LR(1)同心集后的项目集其核心部分不变，仅搜索符合并。</p>
+<h2 id="第六章-属性文法和语法制导翻译"><a href="#第六章-属性文法和语法制导翻译" class="headerlink" title="第六章 属性文法和语法制导翻译"></a>第六章 属性文法和语法制导翻译</h2><h3 id="属性文法"><a href="#属性文法" class="headerlink" title="属性文法"></a>属性文法</h3><p>在上下文无关文法得到基础上，为每个文法符号配备若干相关的值。<br><strong>语义规则</strong>：对于文法的每个产生式都配备了一组属性的计算规则。</p>
+<p>对于产生式的一套语义规则<code>$$b:=f(c1,c2,…,ck)$$</code>：</p>
+<ul>
+<li>b是A的综合属性，并且c是产生式右边文法符号的属性，或者A的其他属性</li>
+<li>b是产生式右边某个文法符号的一个继承属性，并且c是A或产生式右边任何文法符号的属性</li>
+</ul>
+<p>终结符只有综合属性，由词法分析器提供。<br>非终结符既可有综合属性也可有继承属性，文法开始符号的所有继承属性作为属性计算前的初始值。<br>对出现在产生式右边的继承属性和出现在产生式左边的综合属性都必须提供一个计算规则。属性计算规则中只能使用相应产生式中的文法符号的属性。<br>出现在产生式左边的继承属性和出现在产生式右边的综合属性不由所给的产生式的属性计算规则进行计算，它们由其它产生式的属性规则计算或者由属性计算器的参数提供。</p>
+<h4 id="综合属性"><a href="#综合属性" class="headerlink" title="综合属性"></a>综合属性</h4><p>在语法树中，一个结点的综合属性的值由其子节点的属性值确定。使用自底向上的方法在每一个节点处使用语义规则计算综合属性的值。<br>仅使用综合属性的属性文法称为<strong>S-属性文法</strong>。</p>
+<h4 id="继承属性"><a href="#继承属性" class="headerlink" title="继承属性"></a>继承属性</h4><p>在语法树中，一个结点的继承属性由此结点的父结点和&#x2F;或兄弟结点的某些属性确定。</p>
+<h3 id="基于属性文法的处理方法"><a href="#基于属性文法的处理方法" class="headerlink" title="基于属性文法的处理方法"></a>基于属性文法的处理方法</h3><p>由源程序的语法结构所驱动的处理办法就是<strong>语法制导翻译法</strong>。</p>
+<h4 id="依赖图"><a href="#依赖图" class="headerlink" title="依赖图"></a>依赖图</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">for 语法树中的每一结点n do</span><br><span class="line">	for 结点n的文法符号的每一个属性a do</span><br><span class="line">		为a在依赖图中建立一个结点;</span><br><span class="line"></span><br><span class="line">for 语法树中的每一个结点n do</span><br><span class="line">	for 结点n所用产生式对应的每一个语义规则 b:=f do</span><br><span class="line">		for i:=1 to k do</span><br><span class="line">			从ci结点到b结点构造一条有向边;</span><br></pre></td></tr></table></figure>
+
+<p>如果一属性文法不存在属性之间的循环依赖关系，那么称该文法为良定义的。</p>
+<p>一个依赖图的任何拓扑排序都给出一个语法树中结点的语义规则计算的有效顺序。</p>
+<h4 id="树遍历"><a href="#树遍历" class="headerlink" title="树遍历"></a>树遍历</h4><p>假设语法树已建立，且树中已带有开始符号的继承属性和终结符的综合属性。<br>以某种次序反复遍历语法树，计算出能计算的所有属性，直至计算出所有属性。</p>
+<h4 id="一遍扫描"><a href="#一遍扫描" class="headerlink" title="一遍扫描"></a>一遍扫描</h4><p>语法分析的同时计算属性值。<br>L-属性文法适合于一遍扫描的自上而下分析。<br>S-属性文法适合于一遍扫描的自下而上分析。</p>
+<p>所谓语法制导翻译法，直观上说就是为文法中每个产生式配上一组语义规则，并且在语法分析的同时执行这些语义规则。<br>语义规则被计算的时机：</p>
+<ul>
+<li>自上而下：产生式匹配输入串成功时</li>
+<li>自下而上：产生式被用于进行归约时</li>
+</ul>
+<h4 id="抽象语法树"><a href="#抽象语法树" class="headerlink" title="抽象语法树"></a>抽象语法树</h4><p>在语法树中去掉那些对翻译不必要的信息，从而获得更有效的源程序中间表示。这种经变换后的语法树称之为抽象语法树。</p>
+<h3 id="S-属性文法的自下而上计算"><a href="#S-属性文法的自下而上计算" class="headerlink" title="S-属性文法的自下而上计算"></a>S-属性文法的自下而上计算</h3><p>S-属性文法：只含有综合属性。<br>分析器可以保存与栈中文法符号有关的综合属性值，每当进行归约时，新的属性值就由栈中正在归约的产生式右边符号的属性值来计算。</p>
+<h3 id="L-属性文法和自顶向下翻译"><a href="#L-属性文法和自顶向下翻译" class="headerlink" title="L-属性文法和自顶向下翻译"></a>L-属性文法和自顶向下翻译</h3><p>通过深度优先的方法对语法树进行遍历，计算属性文法的所有属性值。<br>一个属性文法称为L-属性文法，如果对于每个产生式<code>$$A\rightarrow X_1X_2...X_n$$</code>，其每个语义规则中的每个属性或者是综合属性，或者是继承属性，这个继承属性仅依赖于：</p>
+<ul>
+<li>其左侧符号的属性</li>
+<li>A的继承属性</li>
+</ul>
+<p>由于S-属性文法仅含综合属性，所以它一定是L-属性文法。</p>
+<h4 id="翻译模式"><a href="#翻译模式" class="headerlink" title="翻译模式"></a>翻译模式</h4><p>给出了使用语义规则进行计算的次序，这样就可把某些实现细节表示出来。</p>
+<p>设计翻译模式时，必须保证当某个动作引用一个属性时它必须是有定义的。L-属性文法确保了这一点。</p>
+<p>当只需要综合属性时：为每一个语义规则建立一个包含赋值的动作，并把这个动作放在相应的产生式右边的末尾。<br>如果既需要综合属性又需要继承属性，则要保证：</p>
+<ul>
+<li>产生式右边符号的继承属性必须在这个符号以前的动作计算出来</li>
+<li>一个动作不能引用这个动作右边符号的综合属性</li>
+<li>左边非终结符得到综合属性必须在引用的所有属性计算出来后才能计算，动作放在右端末尾可以解决大部分情况的问题</li>
+</ul>
+<h4 id="自顶向下翻译"><a href="#自顶向下翻译" class="headerlink" title="自顶向下翻译"></a>自顶向下翻译</h4><p>消除左递归，构造新的翻译模式。<br><img src="https://www.nemotte.cn/wordpress/wp-content/uploads/2023/03/QQ%E6%88%AA%E5%9B%BE20230618083610-9.png"></p>
+<h4 id="递归下降翻译器的设计"><a href="#递归下降翻译器的设计" class="headerlink" title="递归下降翻译器的设计"></a>递归下降翻译器的设计</h4><p>对每个非终结符A构造一个函数过程，对A的每个继承属性设置一个形式参数。<br>函数的返回值为A的综合属性（作为记录，或指向记录的一个指针，记录中有若干域，每个属性对应一个域）。为了简单，我们假设每个非终结只有一个综合属性。<br>A对应的函数过程中，为出现在A的产生式中的每一个文法符号的每一个属性都设置一个局部变量。</p>
+<p>非终结符A对应的函数过程中，根据当前的输入符号决定使用哪个产生式候选。</p>
+<p>每个产生式对应的程序代码中，按照从左到右的次序，对于单词符号（终结符）、非终结符和语义动作分别作以下工作：</p>
+<ul>
+<li>对带有综合属性x的终结符X，把x的值存入为X.x设置的变量中。然后产生一个匹配X的调用，并继续读入一个输入符号。</li>
+<li>对于每个非终结符B，产生一个右边带有函数调用的赋值语句</li>
+<li>对于语义动作，把动作的代码抄进分析器中，用代表属性的变量来代替对属性的每一次引用</li>
+</ul>
+<h2 id="第七章-语义分析和中间代码产生"><a href="#第七章-语义分析和中间代码产生" class="headerlink" title="第七章 语义分析和中间代码产生"></a>第七章 语义分析和中间代码产生</h2><h3 id="中间语言"><a href="#中间语言" class="headerlink" title="中间语言"></a>中间语言</h3><h4 id="后缀式"><a href="#后缀式" class="headerlink" title="后缀式"></a>后缀式</h4><p>又称逆波兰表示法。可以如下定义：</p>
+<ul>
+<li>对表达式E，如果E是一个常量或变量，则E的后缀式就是E本身</li>
+<li>如果E是E1 op E2形式的表达式，其中op是任何二元操作符，则E的后缀式为E1’ E2’ op，其中E1’ E2’为E1和E2的后缀式</li>
+<li>如果E是(E)形式的表达式，那么E后缀式是本身</li>
+</ul>
+<p>后缀式的计算用栈实现，自左至右扫描后缀式，每碰到运算量就把它推进栈。每碰到k目运算符就把它作用于栈顶的k个项，并用运算结果代替这k个项。</p>
+<h4 id="图表示法"><a href="#图表示法" class="headerlink" title="图表示法"></a>图表示法</h4><p>无循环有向图(DAG)：</p>
+<ul>
+<li>对表达式中的每个子表达式，DAG中都有一个结点</li>
+<li>一个内部节点代表一个操作符，它的子结点代表操作数</li>
+<li>在一个DAG中代表公共子表达式的结点具有多个父节点</li>
+</ul>
+<h4 id="三地址代码"><a href="#三地址代码" class="headerlink" title="三地址代码"></a>三地址代码</h4><p>形如x:&#x3D;y op z，可以看成是抽象语法树或DAG的一种线性表示。</p>
+<p><strong>三地址语句的种类</strong>：</p>
+<ul>
+<li>x:&#x3D;y op z</li>
+<li>x:&#x3D;op y</li>
+<li>x:&#x3D;y</li>
+<li>goto L</li>
+<li>if x relop y goto L &#x2F; if a goto L</li>
+<li>param x &#x2F; call p, n &#x2F; return y</li>
+<li>x:&#x3D;y[i] &#x2F; x[i]:&#x3D;y</li>
+<li>x:&#x3D;&amp;y &#x2F; x:&#x3D;*y &#x2F; *x:&#x3D;y</li>
+</ul>
+<p>生成三地址代码时，临时变量的名字对应抽象语法树的内部结点。</p>
+<h5 id="四元式"><a href="#四元式" class="headerlink" title="四元式"></a>四元式</h5><p>四个域的记录结构，域分别为：</p>
+<ul>
+<li>操作符</li>
+<li>操作数1</li>
+<li>操作数2</li>
+<li>结果</li>
+</ul>
+<h5 id="三元式"><a href="#三元式" class="headerlink" title="三元式"></a>三元式</h5><p>通过计算临时变量值的语句的位置来引用这个临时变量。<br>三个域：</p>
+<ul>
+<li>操作符</li>
+<li>操作数1</li>
+<li>操作数2</li>
+</ul>
+<h5 id="间接三元式"><a href="#间接三元式" class="headerlink" title="间接三元式"></a>间接三元式</h5><p>用三元式表和间接码表来表示中间代码。</p>
+<h3 id="赋值语句的翻译"><a href="#赋值语句的翻译" class="headerlink" title="赋值语句的翻译"></a>赋值语句的翻译</h3><h4 id="简单算术表达式及赋值语句"><a href="#简单算术表达式及赋值语句" class="headerlink" title="简单算术表达式及赋值语句"></a>简单算术表达式及赋值语句</h4><p>非终结符号E有如下两个属性：</p>
+<ul>
+<li>E.place表示存放E值的名字</li>
+<li>E.code表示对E求值的三地址语句序列<br>函数newtemp的功能是，每次调用它时，将返回一个不同临时变量名字,如T1,T2,…。</li>
+</ul>
+<p>非终结符号S有综合属性S.code，它代表赋值语句S的三地址代码。</p>
+<h4 id="数组元素的引用"><a href="#数组元素的引用" class="headerlink" title="数组元素的引用"></a>数组元素的引用</h4><p>元素A[i1,i2,…,ik]的相对地址公式：<br><code>$$((...(i_1n_2+i_2)n_3+i_3)...)n_k+i_k)×w+base-((...((low_1n_2+low_2)n_3+low_3)...)n_k+low_k)×w$$</code><br><code>$$c = base-((...((low_1n_2+low_2)n_3+low_3)...)n_k+low_k)×w$$</code></p>
+<p>引入下列语义变量或语义过程：</p>
+<ul>
+<li>Elist.ndim：下标个数计数器</li>
+<li>Elist.place：表示临时变量，临时存放已形成的Elist中的下表表达式计算出来的值</li>
+<li>limit(array, j)：给出数组array第j维的长度</li>
+</ul>
+<h3 id="布尔表达式的翻译"><a href="#布尔表达式的翻译" class="headerlink" title="布尔表达式的翻译"></a>布尔表达式的翻译</h3><p>布尔表达式有两种计算方法：</p>
+<ul>
+<li>按照算术表达式的计算方法，一步步算</li>
+<li>用if-else语句解释</li>
+</ul>
+<p>过程emit将三地址代码送到输出文件中，nextstat给出输出序列中下一条三地址语句的地址索引，每产生一条三地址语句，过程emit把nextstat加1。</p>
+<p><strong>两遍扫描</strong>：为给定的输入串构造一棵语法树，深度优先遍历，按照语义规则翻译。</p>
+<p><strong>一遍扫描</strong>：采用四元式形式，四元式存入一个数组中，下标代表标号。</p>
+<p>约定：</p>
+<ul>
+<li>(jnz, a, - ,p)：if a goto p</li>
+<li>(jrop, x, y, p)： if x rop y goto p</li>
+<li>(j, -, -, p)： goto p</li>
+</ul>
+<p>有时转移地址无法立即知道，需要回填。</p>
+<h2 id="第九章-运行时存储空间组织"><a href="#第九章-运行时存储空间组织" class="headerlink" title="第九章 运行时存储空间组织"></a>第九章 运行时存储空间组织</h2><h3 id="目标程序运行时的活动"><a href="#目标程序运行时的活动" class="headerlink" title="目标程序运行时的活动"></a>目标程序运行时的活动</h3><p>过程P一个活动的生存期，指的是从执行该过程体第一步操作到最后一步操作之间的操作序，包括执行P时调用其它过程花费的时间。</p>
+<h4 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h4><h5 id="传地址-Call-by-reference"><a href="#传地址-Call-by-reference" class="headerlink" title="传地址 Call by reference"></a>传地址 Call by reference</h5><p>过程体对形式参数的引用域赋值被处理成对形式单元的间接访问。</p>
+<h5 id="得结果-Call-by-result"><a href="#得结果-Call-by-result" class="headerlink" title="得结果 Call by result"></a>得结果 Call by result</h5><p>形参有两个单元，第一个单元存地址，第二个单元存值。在过程体中，引用第二个单元，在结束后将计算后的值回填到第一个单元的地址中。</p>
+<h5 id="传值-Call-by-value"><a href="#传值-Call-by-value" class="headerlink" title="传值 Call by value"></a>传值 Call by value</h5><p>只传值，不传地址。过程体对形参的操作不会影响实际参数。</p>
+<h5 id="传名-Call-by-name"><a href="#传名-Call-by-name" class="headerlink" title="传名 Call by name"></a>传名 Call by name</h5><p>把过程的代码抄到被调用的位置，形参全部被替换成实参。</p>
+<h3 id="运行时存储器的划分"><a href="#运行时存储器的划分" class="headerlink" title="运行时存储器的划分"></a>运行时存储器的划分</h3><p>一个目标程序运行所需的存储空间包括：</p>
+<ul>
+<li>存放目标代码的空间</li>
+<li>存放数据的空间</li>
+<li>存放程序运行的控制或连接数据所需单元（控制栈）</li>
+</ul>
+<p><img src="https://www.nemotte.cn/wordpress/wp-content/uploads/2023/03/QQ%E6%88%AA%E5%9B%BE20230618083610-10.png"></p>
+<h4 id="活动记录"><a href="#活动记录" class="headerlink" title="活动记录"></a>活动记录</h4><p>假定语言的特点为:允许过程递归调用、允许过程含有可变数组，但过程定义不允许嵌套，如C语言。</p>
+<p>活动记录：运行时，每当进入一个过程就有一个相应的活动记录置于栈顶。此记录含有连接数据、形式单元、局部变量、局部数组的内情向量和临时工作单元等。</p>
+<h4 id="存储分配策略"><a href="#存储分配策略" class="headerlink" title="存储分配策略"></a>存储分配策略</h4><p>**静态分配策略(FORTRAN)**：如果在编译时能确定数据空间的大小，则可采用静态分配方法：在编译时刻为每个数据项目确定出在运行时刻的存储空间中的位置。<br>**动态分配策略(PASCAL)**：如果在编译时不能确定运行时数据空间的大小，则必须采用动态分配方法。允许递归过程和动态申请释放内存。</p>
+<h3 id="静态存储管理"><a href="#静态存储管理" class="headerlink" title="静态存储管理"></a>静态存储管理</h3><p>由于每个FORTRAN程序段可以独立编译，运行前由装入程序把各段连成可运行的整体。通常按数据区组织存储:</p>
+<ul>
+<li>每个程序段定义一个局部数据区，用来存放程序段中未出现在COMMON里的局部名的值</li>
+<li>每个公用块定义一个公用数据区，用来存放公用块里各个名字的值</li>
+</ul>
+<h3 id="一个简单栈式存储分配"><a href="#一个简单栈式存储分配" class="headerlink" title="一个简单栈式存储分配"></a>一个简单栈式存储分配</h3><h4 id="C的活动记录"><a href="#C的活动记录" class="headerlink" title="C的活动记录"></a>C的活动记录</h4><p><img src="https://www.nemotte.cn/wordpress/wp-content/uploads/2023/03/QQ%E6%88%AA%E5%9B%BE20230618083610-11.png"></p>
+<h4 id="C的过程调用、过程进入、数组空间分配和过程返回"><a href="#C的过程调用、过程进入、数组空间分配和过程返回" class="headerlink" title="C的过程调用、过程进入、数组空间分配和过程返回"></a>C的过程调用、过程进入、数组空间分配和过程返回</h4><p>过程调用的四元式序列：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">par T1</span><br><span class="line">par T2</span><br><span class="line">...</span><br><span class="line">par Tn</span><br><span class="line">call P, n</span><br></pre></td></tr></table></figure>
+
+<p>par表示传参，call表示调用。</p>
+<p>每个par Ti可以直接翻译成如下指令：</p>
+<ul>
+<li>(i+3)[TOP]:&#x3D;Ti 将Ti的值存储到TOP+i+3的地址上</li>
+<li>(i+3)[TOP]:&#x3D;addr(Ti) 将Ti的地址存储到TOP+i+3的地址上</li>
+</ul>
+<p>call P, n被翻译成：</p>
+<ul>
+<li>1[TOP]:&#x3D;SP 保护现SP</li>
+<li>3[TOP]:&#x3D;n 传递参数个数为n</li>
+<li>JSP P 跳转子指令</li>
+</ul>
+<p>转进过程P后，首先应执行下述指令:</p>
+<ul>
+<li>SP:&#x3D;TOP+1</li>
+<li>1[SP]:&#x3D;返回地址</li>
+<li>TOP:&#x3D;TOP+L L是过程P活动记录需要的单元数</li>
+</ul>
+<p>过程返回时，应执行下列指令:</p>
+<ul>
+<li>TOP:&#x3D;SP-1 恢复调用前TOP</li>
+<li>SP:&#x3D;0[SP] 恢复调用前SP</li>
+<li>X:&#x3D;2[TOP] 把返回地址取到X</li>
+<li>UJ 0[X] 按X返回</li>
+</ul>
+<h3 id="嵌套过程语言的栈式实现"><a href="#嵌套过程语言的栈式实现" class="headerlink" title="嵌套过程语言的栈式实现"></a>嵌套过程语言的栈式实现</h3><p>假定语言不仅允许过程的递归调用(和可变数组)，而且允许过程定义的嵌套，如PASCAL，PL语言。</p>
+<h4 id="非局部名字的访问的实现"><a href="#非局部名字的访问的实现" class="headerlink" title="非局部名字的访问的实现"></a>非局部名字的访问的实现</h4><p>主程序的层次为0；在i层中定义的过程，其层次为i+1;<br>过程运行时，必须知道其所有外层过程的当前活动记录的起始地址。</p>
+<h5 id="静态链和活动记录"><a href="#静态链和活动记录" class="headerlink" title="静态链和活动记录"></a>静态链和活动记录</h5><p><strong>静态链</strong>：指向本过程的<strong>直接外层过程</strong>的活动记录的起始地址，也称存取链。<br><strong>动态链</strong>：指向本过程的<strong>调用过程</strong>的活动记录的起始地址，也称控制链。</p>
+<p>活动记录从下至上依次为：</p>
+<ul>
+<li>动态链</li>
+<li>返回地址</li>
+<li>静态链</li>
+<li>参数个数</li>
+<li>形式单元</li>
+<li>变量等过程内部信息</li>
+</ul>
+<h5 id="嵌套层次显示表display"><a href="#嵌套层次显示表display" class="headerlink" title="嵌套层次显示表display"></a>嵌套层次显示表display</h5><p>当进入一个过程后，在建立其活动记录区的同时建立一张嵌套层次显示表display，把display表作为活动记录的一部分。</p>
+<p>假设过程R的外层为Q，Q外层为主程序P，则过程R的运行时DISPLAY表内容为：</p>
+<ul>
+<li>2 R现行活动记录地址 SP现值</li>
+<li>1 Q的最新活动记录地址</li>
+<li>0 P的活动记录地址</li>
+</ul>
+<h5 id="PL全局display表"><a href="#PL全局display表" class="headerlink" title="PL全局display表"></a>PL全局display表</h5><p>记录结构：</p>
+<ul>
+<li>RA</li>
+<li>DL</li>
+<li>SL</li>
+<li>形式单元</li>
+</ul>
+<p>通过全局display表找到活动记录。<br>display表的1层放主程序记录RA，第二层放最新调用的所有于主程序层次差为1的过程记录RA，第三层层次差为2，以此类推。</p>
+<h2 id="第十章-优化"><a href="#第十章-优化" class="headerlink" title="第十章 优化"></a>第十章 优化</h2><p>对程序进行各种等价变换，使得从变换后的程序出发，能生成更有效的目标代码。</p>
+<p>优化的目的是为了产生更高效的代码。由优化编译程序提供的对代码的各种变换必须遵循一定的原则：</p>
+<ul>
+<li>等价原则：经过优化后不应改变程序运行的结果；</li>
+<li>有效原则：使优化后所产生的目标代码运行时间较短，占用的存储空间较小；</li>
+<li>合算原则：应尽可能以较低的代价取得较好的优化效果。</li>
+</ul>
+<p>三个不同级别：</p>
+<ul>
+<li>局部优化</li>
+<li>循环优化</li>
+<li>全局优化</li>
+</ul>
+<p>种类：</p>
+<ul>
+<li>删除多与运算</li>
+<li>代码外提</li>
+<li>强度削弱</li>
+<li>变换循环控制条件</li>
+<li>合并已知量</li>
+<li>复写传播</li>
+<li>删除无用赋值</li>
+</ul>
+<h3 id="局部优化"><a href="#局部优化" class="headerlink" title="局部优化"></a>局部优化</h3><p>基本块：指程序中一顺序执行语句序列，其中只有一个入口和一个出口。入口就是其中第一个语句，出口就是其中最后一个语句。</p>
+<p>如果一条三地址语句为x:&#x3D;y+z，则称对x定值并引用y和z。</p>
+<p>局限于基本块范围内的优化称为基本块内的优化，或称局部优化。</p>
+<h4 id="划分基本块"><a href="#划分基本块" class="headerlink" title="划分基本块"></a>划分基本块</h4><p>求出四元式程序中各个基本块的入口语句:</p>
+<ol>
+<li>程序第一个语句，或</li>
+<li>能由条件转移语句或无条件转移语句转移到的语句，或</li>
+<li>紧跟在条件转移语句后面的语句。</li>
+</ol>
+<p>对以上求出的每个入口语句，确定其所属的基本块。它是由该入口语句到下一入口语句(不包括该入口语句)、或到一转移语句(包括该转移语句)、或一停语句(包括该停语句)之间的语句序列组成的。</p>
+<p>凡未被纳入某一基本块中的语句，可以从程序中删除。</p>
+<h4 id="流图"><a href="#流图" class="headerlink" title="流图"></a>流图</h4><p>每个流图以基本块为结点。如果一个结点的基本块的入口语句是程序的第一条语句，则称此结点为首结点。如果在某个执行顺序中，基本块B2紧接在基本块B1之后执行，则从B1到B2有一条有向边。</p>
+<p><img src="https://www.nemotte.cn/wordpress/wp-content/uploads/2023/03/QQ%E6%88%AA%E5%9B%BE20230618083610-12.png"></p>
+<p>描述计算过程的DAG是一种带有下述标记或附加信息的DAG：<br>图的叶结点以一标识符或常数作为标记，表示该结点代表该变量或常数的值;<br>图的内部结点以一运算符作为标记，表示该结点代表应用该运算符对其后继结点所代表的值进行运算的结果;</p>
+
+	</div>
+</article>
+
+
+
+    </div>
+  </div>
+  <div class="row">
+<div id="bottom" class="col-md-12"> 
+  <div class="bottom-nav">
+	
+	
+	<a href="https://github.com/Nemotte" class="fa fa-github fa-2x" target="_blank" title="Follow me" ></a>
+	
+	
+</div>
+<div class="bottom-info">
+	&copy; 2023 Nemotte<br>
+	Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	theme <a href="https://github.com/lizehongss/hexo-theme-zhl" target="_blank">zhl</a>
+</div>
+</div>
+</div>
+</div>
+<div id="tool">
+  <ul>
+    <li class="fa fa-angle-up top" id="top"></li>
+  </ul>
+</div>
+  <div class="bg_content">
+    <canvas id="canvas"></canvas>
+  </div>
+  
+  <!-- scripts list from theme config.yml -->
+  
+    <script src="/js/zhl.js"></script>
+  
+    <script src="/js/bj.js"></script>
+  
+
+<!-- jQ cdn  -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<!-- bootstrap js cdn-->
+<!-- <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
+
+
+</body>
+</html>
